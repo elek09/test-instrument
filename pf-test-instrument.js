@@ -78,21 +78,29 @@ class PfTestInstrument extends GlassCockpitParent {
         this.statusPage.style.display = "block";
     }
 
+    _updateAttitude() {
+        const pitch = this.upDownSlider.value;
+        const bank = this.turningSlider.value;
+
+        // Move pitch group up and down based on pitch slider
+        this.pitchGroup.setAttribute('transform', `translate(0, ${-pitch * 1.5}) rotate(${-bank})`);
+
+        // Rotate bank group based on turning slider
+        this.bankGroup.setAttribute('transform', `rotate(${-bank})`);
+    }
     Update() {
         super.Update();
         let electricity;
 
         if (isMsfs) {
-            // Replace with actual variable name or logic to get circuit status
+            // TODO CHANGE CIRCUIT VARIABLE TO THE RIGHT ONE FOR THE CURRENT USECASE
             electricity = SimVar.GetSimVarValue(CIRCUIT, "Bool");
             if (!electricity) return this._turnOff();
-        } else {
+        }
+        else {
             electricity = VarGet(CIRCUIT, "Bool");
             if (electricity == false) return this._turnOff();
         }
-
-        // Update the display based on the circuit status
-        document.getElementById('circuitStatus').innerText = `CIRCUIT ON: ${electricity ? '1' : '0'}`;
 
         if (electricity && this.elemPanel.getAttribute("state") == "off") {
             this._turnOn();
@@ -110,11 +118,10 @@ class PfTestInstrument extends GlassCockpitParent {
     }
 }
 
-
+// Javított zárójeles logika a végén:
 if (isMsfs) {
     registerInstrument("pf-test-instrument", PfTestInstrument);
-}
-else {
+} else {
     const glasscockpit = new PfTestInstrument();
     glasscockpit.Init();
     glasscockpit.connectedCallback();
