@@ -1,0 +1,44 @@
+:root {
+  --size-width: 1024px;
+  --size-height: 768px;
+  --color-background: black;
+  --color-foreground: white;
+}
+
+.container {
+  position: relative;
+  width: var(--size-width);
+  height: var(--size-height);
+  background-color: var(--color-background);
+}
+
+.content {
+  width: var(--size-width);
+  height: var(--size-height);
+}
+
+#panel-container .content {
+  display: none;
+}
+
+#panel-container[state="on"] .content {
+  display: block;
+}
+
+#Electricity {
+  color: var(--color-foreground);
+}
+
+.bold {
+  font-weight: bold;
+}
+
+#attitudeIndicator {
+  display: block;
+  margin: 0 auto;
+}
+
+svg {
+  background-color: #1e1e1e;
+  border-radius: 50%;
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <!-- @css -->
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="pf-module-glasscockpit-testing/glasscockpit-testing.css">
+    <link rel="stylesheet" href="pf-test-instrument.css">
+    <!-- @css -->
+</head>
+
+<body>
+    <!-- @body id="PF-TEST-INSTRUMENT" -->
+    <div id="Mainframe">
+        <div id="Electricity" state="off">
+            <div id="panel-container" class="container" state="off">
+                <!-- Content pages -->
+                <div id="attitudePage" class="content" style="background-color: lightblue;">
+                    <h1>Attitude Page</h1>
+                    <svg id="attitudeIndicator" width="300" height="300" viewBox="-150 -150 300 300">
+                        <!-- Background colors: Sky and ground -->
+                        <rect x="-150" y="-150" width="300" height="150" fill="skyblue" />
+                        <rect x="-150" y="0" width="300" height="150" fill="brown" />
+
+                        <!-- Horizon line -->
+                        <line id="horizonLine" x1="-150" y1="0" x2="150" y2="0" stroke="white" stroke-width="2" />
+
+                        <!-- Bank angle path -->
+                        <path d="M -140 0 A 140 140 0 0 1 140 0" fill="none" stroke="white" stroke-width="2" />
+
+                        <!-- Bank angle tick marks -->
+                        <line x1="0" y1="-140" x2="0" y2="-150" stroke="white" stroke-width="2"
+                            transform="rotate(-30)" />
+                        <line x1="0" y1="-140" x2="0" y2="-150" stroke="white" stroke-width="2"
+                            transform="rotate(-60)" />
+                        <line x1="0" y1="-140" x2="0" y2="-150" stroke="white" stroke-width="2"
+                            transform="rotate(30)" />
+                        <line x1="0" y1="-140" x2="0" y2="-150" stroke="white" stroke-width="2"
+                            transform="rotate(60)" />
+
+                        <!-- Above horizon (long lines) -->
+                        <line x1="-50" y1="-30" x2="50" y2="-30" stroke="white" stroke-width="2" />
+                        <line x1="-50" y1="-60" x2="50" y2="-60" stroke="white" stroke-width="2" />
+                        <line x1="-50" y1="-90" x2="50" y2="-90" stroke="white" stroke-width="2" />
+
+                        <!-- Numbers for pitch above horizon -->
+                        <text x="-70" y="-25" fill="white" font-size="12">10</text>
+                        <text x="-70" y="-55" fill="white" font-size="12">20</text>
+                        <text x="-70" y="-85" fill="white" font-size="12">30</text>
+
+                        <!-- Right side numbers for pitch above horizon -->
+                        <text x="60" y="-25" fill="white" font-size="12">10</text>
+                        <text x="60" y="-55" fill="white" font-size="12">20</text>
+                        <text x="60" y="-85" fill="white" font-size="12">30</text>
+
+                        <!-- Below horizon (long lines)-->
+                        <line x1="-50" y1="30" x2="50" y2="30" stroke="white" stroke-width="2" />
+                        <line x1="-50" y1="60" x2="50" y2="60" stroke="white" stroke-width="2" />
+                        <line x1="-50" y1="90" x2="50" y2="90" stroke="white" stroke-width="2" />
+
+                        <!-- Numbers for pitch below horizon -->
+                        <text x="-70" y="35" fill="white" font-size="12">10</text>
+                        <text x="-70" y="65" fill="white" font-size="12">20</text>
+                        <text x="-70" y="95" fill="white" font-size="12">30</text>
+
+                        <!-- Numbers for pitch below horizon -->
+                        <text x="60" y="35" fill="white" font-size="12">10</text>
+                        <text x="60" y="65" fill="white" font-size="12">20</text>
+                        <text x="60" y="95" fill="white" font-size="12">30</text>
+
+                        <!-- Small lines above-->
+                        <line x1="-35" y1="-15" x2="35" y2="-15" stroke="white" stroke-width="1" />
+                        <line x1="-35" y1="-45" x2="35" y2="-45" stroke="white" stroke-width="1" />
+                        <line x1="-35" y1="-75" x2="35" y2="-75" stroke="white" stroke-width="1" />
+                        <line x1="-35" y1="-105" x2="35" y2="-105" stroke="white" stroke-width="1" />
+
+                        <!-- Small lines below-->
+                        <line x1="-35" y1="15" x2="35" y2="15" stroke="white" stroke-width="1" />
+                        <line x1="-35" y1="45" x2="35" y2="45" stroke="white" stroke-width="1" />
+                        <line x1="-35" y1="75" x2="35" y2="75" stroke="white" stroke-width="1" />
+                        <line x1="-35" y1="105" x2="35" y2="105" stroke="white" stroke-width="1" />
+
+                        <!-- Slip Indicator (long line - dot - long line) -->
+                        <line x1="-30" y1="0" x2="-10" y2="0" stroke="yellow" stroke-width="5" />
+                        <circle cx="0" cy="0" r="5" fill="yellow" />
+                        <line x1="10" y1="0" x2="30" y2="0" stroke="yellow" stroke-width="5" />
+
+                        <!-- Bank angle triangle -->
+                        <polygon id="fixedWhiteBankArc" points="0,-140 10,-150 -10,-150" fill="white" />
+                        <polygon id="bankArc" points="0,-138 10,-128 -10,-128" fill="yellow" />
+                    </svg>
+
+
+                    <!-- Sliders for pitch, bank, and slip -->
+                    <label for="pitchSlider">Pitch</label>
+                    <input type="range" id="pitchSlider" min="-100" max="100" value="0">
+
+                    <label for="bankSlider">Bank</label>
+                    <input type="range" id="bankSlider" min="-60" max="60" value="0">
+
+                    <label for="slipSlider">Slip</label>
+                    <input type="range" id="slipSlider" min="-30" max="30" value="0">
+                </div>
+
+
+                <div id="statusPage" class="content" style="background-color: lightgreen; display:none;">
+                    <h1>Status Page</h1>
+                </div>
+
+                <!-- Buttons for pagination -->
+                <button id="btnAttitude">Attitude</button>
+                <button id="btnStatus">Status</button>
+            </div>
+        </div>
+    </div>
+    <!-- @body -->
+
+    <div id="glasscockpit-testing"></div>
+
+    <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
+    <script src="pf-test-instrument-constants.js"></script>
+    <!-- @js -->
+
+    <script src="pf-module-glasscockpit-testing/glasscockpit-testing.js"></script>
+    <script src="pf-module-glasscockpit-testing/rulers.js"></script>
+
+    <script>
+        // TODO Add your variables here (and change the one below when dont needed)
+        glasscockpitTesting.addSimVar(CIRCUIT, "Bool", 0, "circuit_on", 0, 1, 1, 1);
+    </script>
+
+    <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
+    <script src="pf-test-instrument.js"></script>
+    <!-- @js -->
+</body>
+
+</html>
