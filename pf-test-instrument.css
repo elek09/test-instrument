@@ -1,7 +1,7 @@
 :root {
   --size-width: 1024px;
   --size-height: 768px;
-  --color-background: black;
+  --background-color: var(--color-background);
   --color-foreground: white;
 }
 
@@ -41,4 +41,48 @@
 svg {
   background-color: #1e1e1e;
   border-radius: 50%;
+}
+
+label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* Csúszkák stílusának javítása */
+input[type="range"] {
+  width: 150px;
+  margin-right: 20px;
+}
+
+/* SVG vizuális középre igazítása */
+#attitudeIndicator {
+  display: block;
+  margin: 0 auto;
+}
+
+input[type="range"] {
+  width: 200px; /* Növelt szélesség */
+  margin: 20px 10px; /* Kicsit több hely közöttük */
+}
+
+button {
+  background-color: darkgrey;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 16px;
+  padding: 15px 30px;
+  font-size: 18px;
+}
+
+button:hover {
+  background-color: #333;
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
 }

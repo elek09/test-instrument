@@ -44,13 +44,14 @@ class PfTestInstrument extends GlassCockpitParent {
         // Get references to the pages and sliders
         this.attitudePage = document.getElementById("attitudePage");
         this.statusPage = document.getElementById("statusPage");
-        this.pitchSlider = document.getElementById("pitchSlider");
-        this.bankSlider = document.getElementById("bankSlider");
-        this.slipSlider = document.getElementById("slipSlider");
+        this.upDownSlider = document.getElementById("upDownSlider");
+        this.turningSlider = document.getElementById("turningSlider");
 
         this.horizonLine = document.getElementById("horizonLine");
         this.bankArc = document.getElementById("bankArc");
-        this.slipIndicator = document.getElementById("slipIndicator");
+        this.bankArcTriangle = document.getElementById("bankArcTriangle");
+        this.pitchGroup = document.getElementById("pitchGroup");
+        this.bankGroup = document.getElementById("bankGroup");
 
         const btnAttitude = document.getElementById("btnAttitude");
         const btnStatus = document.getElementById("btnStatus");
@@ -63,9 +64,8 @@ class PfTestInstrument extends GlassCockpitParent {
         btnStatus.addEventListener('click', () => this._showStatusPage());
 
         // Add event listeners to sliders
-        this.pitchSlider.addEventListener('input', () => this._updateAttitude());
-        this.bankSlider.addEventListener('input', () => this._updateAttitude());
-        this.slipSlider.addEventListener('input', () => this._updateAttitude());
+        this.upDownSlider.addEventListener('input', () => this._updateAttitude());
+        this.turningSlider.addEventListener('input', () => this._updateAttitude());
     }
 
     _showAttitudePage() {
@@ -78,34 +78,21 @@ class PfTestInstrument extends GlassCockpitParent {
         this.statusPage.style.display = "block";
     }
 
-    _updateAttitude() {
-        const pitch = this.pitchSlider.value;
-        const bank = this.bankSlider.value;
-        const slip = this.slipSlider.value;
-
-        // Update horizon line based on pitch
-        this.horizonLine.setAttribute('transform', `translate(0, ${-pitch * 1.5})`);
-
-        // Update bank arc rotation based on bank angle
-        this.bankArc.setAttribute('transform', `rotate(${-bank})`);
-
-        // Update slip indicator movement
-        this.slipIndicator.setAttribute('transform', `translate(${slip}, 0)`);
-    }
-
     Update() {
         super.Update();
         let electricity;
 
         if (isMsfs) {
-            // TODO CHANGE CIRCUIT VARIABLE TO THE RIGHT ONE FOR THE CURRENT USECASE
+            // Replace with actual variable name or logic to get circuit status
             electricity = SimVar.GetSimVarValue(CIRCUIT, "Bool");
             if (!electricity) return this._turnOff();
-        }
-        else {
+        } else {
             electricity = VarGet(CIRCUIT, "Bool");
             if (electricity == false) return this._turnOff();
         }
+
+        // Update the display based on the circuit status
+        document.getElementById('circuitStatus').innerText = `CIRCUIT ON: ${electricity ? '1' : '0'}`;
 
         if (electricity && this.elemPanel.getAttribute("state") == "off") {
             this._turnOn();
