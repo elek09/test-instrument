@@ -48,32 +48,18 @@ label {
   font-weight: bold;
 }
 
-/* Csúszkák stílusának javítása */
 input[type="range"] {
-  width: 150px;
-  margin-right: 20px;
-}
-
-/* SVG vizuális középre igazítása */
-#attitudeIndicator {
-  display: block;
-  margin: 0 auto;
-}
-
-input[type="range"] {
-  width: 200px; /* Növelt szélesség */
-  margin: 20px 10px; /* Kicsit több hely közöttük */
+  width: 200px;
+  margin: 20px 10px;
 }
 
 button {
   background-color: darkgrey;
   color: white;
-  padding: 10px 20px;
+  padding: 15px 30px;
   border: none;
   cursor: pointer;
   margin-right: 5px;
-  font-size: 16px;
-  padding: 15px 30px;
   font-size: 18px;
 }
 
@@ -85,4 +71,58 @@ h1 {
   text-align: center;
   font-size: 24px;
   color: #333;
+}
+
+/* Flaps and EGT indicators side by side */
+#statusIndicators {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Flaps Bar and EGT Bar shared styles */
+.flapBar,
+.egtBar {
+  width: 50px;
+  height: 200px;
+  background-color: black;
+  border: 2px solid white;
+  position: relative;
+}
+
+/* Flap Value */
+.flapValue {
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  top: 0;
+}
+
+/* Flap Target */
+.flapTarget {
+  width: 100%;
+  height: 2px;
+  background-color: magenta;
+  position: absolute;
+  bottom: 0;
+}
+
+/* EGT Value */
+.egtValue {
+  width: 100%;
+  height: 50%;
+  background-color: green;
+  position: absolute;
+  bottom: 0;
+}
+
+/* EGT Threshold */
+.egtThreshold {
+  width: 100%;
+  height: 2px;
+  background-color: red;
+  position: absolute;
+  bottom: 60%;
 }

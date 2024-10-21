@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
@@ -16,7 +15,7 @@
         <div id="Electricity" state="off">
             <div id="panel-container" class="container" state="off">
                 <!-- Content pages -->
-                <div id="attitudePage" class="content" style="background-color: lightblue;">
+                <div id="attitudePage" class="content" id="instrumentPanel" style="background-color: lightblue;">
                     <h1 style="text-align: center; font-size: 36px;">Attitude Page</h1>
                     <svg id="attitudeIndicator" width="450" height="450" viewBox="-150 -150 300 300">
                         <!-- Background colors: Sky and ground -->
@@ -107,9 +106,51 @@
                     </div>
                 </div>
 
+                <!-- Status Page -->
+                <div id="statusPage" class="content" style="background-color: #333; display:none;">
+                    <h1 style="text-align: center; font-size: 36px; color: white;">Status Page</h1>
 
-                <div id="statusPage" class="content" style="background-color: lightgreen; display:none;">
-                    <h1 style="text-align: center; font-size: 36px;">Status Page</h1>
+                    <div id="statusIndicators"
+                        style="display: flex; justify-content: space-around; align-items: center;">
+
+                        <!-- Flaps Indicator Section -->
+                        <div id="flapsIndicator" style="text-align: center;">
+                            <p>FLAPS</p>
+                            <div class="flapGroup" style="display: flex; justify-content: space-between; width: 200px;">
+                                <div class="flapBar">
+                                    <div class="flapValue" id="leftFlap"></div>
+                                    <div class="flapTarget" id="leftFlapTarget"></div>
+                                </div>
+                                <div class="flapBar">
+                                    <div class="flapValue" id="rightFlap"></div>
+                                    <div class="flapTarget" id="rightFlapTarget"></div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; width: 200px;">
+                                <p>LEFT</p>
+                                <p>RIGHT</p>
+                            </div>
+                        </div>
+
+                        <!-- EGT Indicator Section -->
+                        <div id="egtIndicator" style="text-align: center;">
+                            <p>EXHAUST GAS TEMPERATURE</p>
+                            <div class="egtGroup" style="display: flex; justify-content: space-between; width: 200px;">
+                                <div class="egtBar">
+                                    <div class="egtValue" id="egt1"></div>
+                                    <div class="egtThreshold" id="egtThreshold1"></div>
+                                </div>
+                                <div class="egtBar">
+                                    <div class="egtValue" id="egt2"></div>
+                                    <div class="egtThreshold" id="egtThreshold2"></div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; width: 200px;">
+                                <p>E1 EGT <br><span style="color: green;" id="egt1Value">300°C</span></p>
+                                <p>E2 EGT <br><span style="color: orange;" id="egt2Value">700°C</span></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Buttons for pagination -->
@@ -133,6 +174,27 @@
         <script>
             // TODO Add your variables here (and change the one below when dont needed)
             glasscockpitTesting.addSimVar(CIRCUIT, "Bool", 0, "circuit_on", 0, 1, 1, 1);
+
+            // Add your JavaScript code here
+            function updateFlaps(leftFlapPosition, rightFlapPosition, leftFlapTarget, rightFlapTarget) {
+                document.getElementById('leftFlap').style.height = `${leftFlapPosition}%`;
+                document.getElementById('leftFlapTarget').style.bottom = `${leftFlapTarget}%`;
+
+                document.getElementById('rightFlap').style.height = `${rightFlapPosition}%`;
+                document.getElementById('rightFlapTarget').style.bottom = `${rightFlapTarget}%`;
+            }
+
+            function updateEGT(egt1Value, egt2Value) {
+                document.getElementById('egt1').style.height = `${egt1Value / 10}%`; // Assuming full bar is 1000°C
+                document.getElementById('egt1Value').innerText = `${egt1Value}°C`;
+
+                document.getElementById('egt2').style.height = `${egt2Value / 10}%`;
+                document.getElementById('egt2Value').innerText = `${egt2Value}°C`;
+            }
+
+            // Example of updating the indicators (for testing)
+            updateFlaps(40, 60, 30, 50);
+            updateEGT(300, 700); // EGT1 at 300°C, EGT2 at 700°C
         </script>
 
         <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->

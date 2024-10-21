@@ -17,7 +17,7 @@ let GlassCockpitParent = isMsfs ? BaseInstrument : class {
 class PfTestInstrument extends GlassCockpitParent {
     constructor() {
         super();
-
+        this.isInstrumentOn = false;
         // Not safe to call getElementById here in MSFS, only in connectedCallback()
     }
 
@@ -88,37 +88,44 @@ class PfTestInstrument extends GlassCockpitParent {
         // Rotate bank group based on turning slider
         this.bankGroup.setAttribute('transform', `rotate(${-bank})`);
     }
+
+
     Update() {
         super.Update();
         let electricity;
 
         if (isMsfs) {
-            // TODO CHANGE CIRCUIT VARIABLE TO THE RIGHT ONE FOR THE CURRENT USECASE
             electricity = SimVar.GetSimVarValue(CIRCUIT, "Bool");
-            if (!electricity) return this._turnOff();
-        }
-        else {
+        } else {
             electricity = VarGet(CIRCUIT, "Bool");
-            if (electricity == false) return this._turnOff();
         }
 
-        if (electricity && this.elemPanel.getAttribute("state") == "off") {
+        console.log("Electricity status: ", electricity); // Log the electricity status
+
+        if (electricity && !this.isInstrumentOn) {
+            console.log("Turning on instrument panel");
             this._turnOn();
+        } else if (!electricity && this.isInstrumentOn) {
+            console.log("Turning off instrument panel");
+            this._turnOff();
         }
-
-        // do the updates here 
     }
 
     _turnOff() {
-        this.elemPanel.setAttribute("state", "off");
+        console.log("Turning off instrument panel.");
+        this.elemPanel.style.display = 'none';
+        this.isInstrumentOn = false;
+        console.log("Instrument panel turned off.");
     }
 
     _turnOn() {
-        this.elemPanel.setAttribute("state", "on");
+        console.log("Turning on instrument panel.");
+        this.elemPanel.style.display = 'block';
+        this.isInstrumentOn = true;
+        console.log("Instrument panel turned on.");
     }
 }
 
-// Javított zárójeles logika a végén:
 if (isMsfs) {
     registerInstrument("pf-test-instrument", PfTestInstrument);
 } else {
