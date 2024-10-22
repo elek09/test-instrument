@@ -45,8 +45,8 @@ class PfTestInstrument extends GlassCockpitParent {
     // Get references to the pages and sliders
     this.attitudePage = document.getElementById("attitudePage");
     this.statusPage = document.getElementById("statusPage");
-    this.upDownSlider = document.getElementById("upDownSlider");
-    this.turningSlider = document.getElementById("turningSlider");
+    //this.upDownSlider = document.getElementById("upDownSlider");
+    //this.turningSlider = document.getElementById("turningSlider");
 
     this.horizonLine = document.getElementById("horizonLine");
     this.bankArc = document.getElementById("bankArc");
@@ -65,8 +65,8 @@ class PfTestInstrument extends GlassCockpitParent {
     btnStatus.addEventListener("click", () => this._showStatusPage());
 
     // Add event listeners to sliders
-    this.upDownSlider.addEventListener("input", () => this._updateAttitude());
-    this.turningSlider.addEventListener("input", () => this._updateAttitude());
+    //this.upDownSlider.addEventListener("input", () => this._updateAttitude());
+    //this.turningSlider.addEventListener("input", () => this._updateAttitude());
   }
 
   _showAttitudePage() {
@@ -98,26 +98,27 @@ class PfTestInstrument extends GlassCockpitParent {
     let electricity;
 
     if (isMsfs) {
-      electricity = SimVar.GetSimVarValue(CIRCUIT, "Bool");
+      electricity = SimVar.GetSimVarValue("A:CIRCUIT", "Bool");
     } else {
-      electricity = VarGet(CIRCUIT, "Bool");
+      electricity = glasscockpitTesting.getSimVarValue("A:CIRCUIT", "Bool");
     }
 
-    console.log("Electricity status: ", electricity); // Log the electricity status
+    //console.log("Electricity status: ", electricity);
 
-    if (electricity && !this.isInstrumentOn) {
-      console.log("Turning on instrument panel");
-      this._turnOn();
-    } else if (!electricity && this.isInstrumentOn) {
-      console.log("Turning off instrument panel");
-      this._turnOff();
+    const mainFrame = document.getElementById("Mainframe");
+
+    if (electricity === 0) {
+      mainFrame.style.display = "none";
+      this.isInstrumentOn = false;
+    } else if (electricity === 1) {
+      mainFrame.style.display = "block";
+      this.isInstrumentOn = true;
     }
 
-    // Update pitch and bank values from the testing variables
-    const pitch = glasscockpitTesting.getSimVarValue(PITCH, "Number"); // Get pitch value
-    const bank = glasscockpitTesting.getSimVarValue(BANK, "Number"); // Get bank value
+    // Update pitch and bank values
+    const pitch = glasscockpitTesting.getSimVarValue("A:PITCH", "Degree");
+    const bank = glasscockpitTesting.getSimVarValue("A:BANK", "Degree");
 
-    // Update the attitude indicator based on the Pitch and Bank
     this.pitchGroup.setAttribute(
       "transform",
       `translate(0, ${-pitch * 1.5}) rotate(${-bank})`

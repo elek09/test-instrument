@@ -17,10 +17,10 @@
                 <!-- Content pages -->
                 <div id="attitudePage" class="content" id="instrumentPanel" style="background-color: lightblue;">
                     <h1 style="text-align: center; font-size: 36px;">Attitude Page</h1>
-                    <svg id="attitudeIndicator" width="450" height="450" viewBox="-150 -150 300 300">
+                    <svg id="attitudeIndicator" width="650" height="650" viewBox="-150 -150 300 300">
                         <!-- Background colors: Sky and ground -->
                         <rect x="-150" y="-150" width="300" height="150" fill="skyblue" />
-                        <rect x="-150" y="0" width="300" height="150" fill="brown" />
+                        <rect x="-150" y="0" width="300" height="150" fill="#895129" />
 
                         <!-- Bank angle path -->
                         <path id="bankArc" d="M -140 0 A 140 140 0 0 1 140 0" fill="none" stroke="white"
@@ -97,6 +97,7 @@
 
 
                     <!-- Sliders for pitch, bank, and slip -->
+                    <!--
                     <div style="text-align: center; margin-top: 20px;">
                         <label for="upDownSlider">Up-Down</label>
                         <input type="range" id="upDownSlider" min="-100" max="100" value="0">
@@ -104,6 +105,7 @@
                         <label for="turningSlider">Turning</label>
                         <input type="range" id="turningSlider" min="-60" max="60" value="0">
                     </div>
+                    -->
                 </div>
 
                 <!-- Status Page -->
@@ -180,75 +182,85 @@
 
             // Add your JavaScript code here
             // Threshold values for EGT
+            
             const EGT_GREEN_LIMIT = 680;
             const EGT_AMBER_LIMIT = 750;
             const EGT_MIN_TEMP = 100;
             const EGT_MAX_TEMP = 899;
 
             // Update Flaps Indicator
-            function updateFlaps(leftFlapPosition, rightFlapPosition, leftFlapTarget, rightFlapTarget) {
-                const leftFlap = document.getElementById('leftFlap');
-                const rightFlap = document.getElementById('rightFlap');
-                const leftTarget = document.getElementById('leftFlapTarget');
-                const rightTarget = document.getElementById('rightFlapTarget');
+            function updateFlaps(
+            leftFlapPosition,
+            rightFlapPosition,
+            leftFlapTarget,
+            rightFlapTarget
+            ) {
+            const leftFlap = document.getElementById("leftFlap");
+            const rightFlap = document.getElementById("rightFlap");
+            const leftTarget = document.getElementById("leftFlapTarget");
+            const rightTarget = document.getElementById("rightFlapTarget");
 
-                // Adjust flap heights based on position
-                leftFlap.style.height = `${leftFlapPosition}%`;
-                rightFlap.style.height = `${rightFlapPosition}%`;
+            // Adjust flap heights based on position
+            leftFlap.style.height = `${leftFlapPosition}%`;
+            rightFlap.style.height = `${rightFlapPosition}%`;
 
-                // Adjust target positions
-                leftTarget.style.bottom = `${leftFlapTarget}%`;
-                rightTarget.style.bottom = `${rightFlapTarget}%`;
+            // Adjust target positions
+            leftTarget.style.bottom = `${leftFlapTarget}%`;
+            rightTarget.style.bottom = `${rightFlapTarget}%`;
 
-                // Hide target line if the flap reaches its target
-                leftTarget.style.display = leftFlapPosition === leftFlapTarget ? 'none' : 'block';
-                rightTarget.style.display = rightFlapPosition === rightFlapTarget ? 'none' : 'block';
+            // Hide target line if the flap reaches its target
+            leftTarget.style.display =
+                leftFlapPosition === leftFlapTarget ? "none" : "block";
+            rightTarget.style.display =
+                rightFlapPosition === rightFlapTarget ? "none" : "block";
             }
 
             // Update EGT Indicator
             function updateEGT(egt1Value, egt2Value) {
-                const egt1 = document.getElementById('egt1');
-                const egt2 = document.getElementById('egt2');
-                const egt1Text = document.getElementById('egt1Value');
-                const egt2Text = document.getElementById('egt2Value');
+            const egt1 = document.getElementById("egt1");
+            const egt2 = document.getElementById("egt2");
+            const egt1Text = document.getElementById("egt1Value");
+            const egt2Text = document.getElementById("egt2Value");
 
-                // Calculate EGT bar heights as a percentage of the total range
-                const egt1Height = ((egt1Value - EGT_MIN_TEMP) / (EGT_MAX_TEMP - EGT_MIN_TEMP)) * 100;
-                const egt2Height = ((egt2Value - EGT_MIN_TEMP) / (EGT_MAX_TEMP - EGT_MIN_TEMP)) * 100;
+            // Calculate EGT bar heights as a percentage of the total range
+            const egt1Height =
+                ((egt1Value - EGT_MIN_TEMP) / (EGT_MAX_TEMP - EGT_MIN_TEMP)) * 100;
+            const egt2Height =
+                ((egt2Value - EGT_MIN_TEMP) / (EGT_MAX_TEMP - EGT_MIN_TEMP)) * 100;
 
-                // Update the bar heights
-                egt1.style.height = `${egt1Height}%`;
-                egt2.style.height = `${egt2Height}%`;
+            // Update the bar heights
+            egt1.style.height = `${egt1Height}%`;
+            egt2.style.height = `${egt2Height}%`;
 
-                // Update text values
-                egt1Text.innerText = `${egt1Value}°C`;
-                egt2Text.innerText = `${egt2Value}°C`;
+            // Update text values
+            egt1Text.innerText = `${egt1Value}°C`;
+            egt2Text.innerText = `${egt2Value}°C`;
 
-                // Change colors based on temperature
-                const updateColor = (element, value) => {
-                    if (value > EGT_AMBER_LIMIT) {
-                        element.style.backgroundColor = 'red';
-                        element.nextElementSibling.style.color = 'red'; // Update text color
-                    } else if (value > EGT_GREEN_LIMIT) {
-                        element.style.backgroundColor = 'orange';
-                        element.nextElementSibling.style.color = 'orange';
-                    } else {
-                        element.style.backgroundColor = 'green';
-                        element.nextElementSibling.style.color = 'green';
-                    }
-                };
+            // Change colors based on temperature
+            const updateColor = (element, value) => {
+                if (value > EGT_AMBER_LIMIT) {
+                element.style.backgroundColor = "red";
+                element.nextElementSibling.style.color = "red"; // Update text color
+                } else if (value > EGT_GREEN_LIMIT) {
+                element.style.backgroundColor = "orange";
+                element.nextElementSibling.style.color = "orange";
+                } else {
+                element.style.backgroundColor = "green";
+                element.nextElementSibling.style.color = "green";
+                }
+            };
 
-                // Apply color changes to EGT1 and EGT2
-                updateColor(egt1, egt1Value);
-                updateColor(egt2, egt2Value);
+            // Apply color changes to EGT1 and EGT2
+            updateColor(egt1, egt1Value);
+            updateColor(egt2, egt2Value);
             }
-
             // Example call to update the indicators (you can replace this with dynamic values)
             updateFlaps(50, 70, 30, 60); // Flaps: 50% left, 70% right
             updateEGT(300, 750); 
         </script>
 
         <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
+        <script src="pf-module-glasscockpit-testing/glasscockpit-testing.js"></script>
         <script src="pf-test-instrument.js"></script>
         <!-- @js -->
 </body>
