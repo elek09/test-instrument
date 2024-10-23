@@ -17,10 +17,10 @@
                 <!-- Content pages -->
                 <div id="attitudePage" class="content" id="instrumentPanel" style="background-color: lightblue;">
                     <h1 style="text-align: center; font-size: 36px;">Attitude Page</h1>
-                    <svg id="attitudeIndicator" width="450" height="450" viewBox="-150 -150 300 300">
+                    <svg id="attitudeIndicator" width="650" height="650" viewBox="-150 -150 300 300">
                         <!-- Background colors: Sky and ground -->
                         <rect x="-150" y="-150" width="300" height="150" fill="skyblue" />
-                        <rect x="-150" y="0" width="300" height="150" fill="brown" />
+                        <rect x="-150" y="0" width="300" height="150" fill="#895129" />
 
                         <!-- Bank angle path -->
                         <path id="bankArc" d="M -140 0 A 140 140 0 0 1 140 0" fill="none" stroke="white"
@@ -97,6 +97,7 @@
 
 
                     <!-- Sliders for pitch, bank, and slip -->
+                    <!--
                     <div style="text-align: center; margin-top: 20px;">
                         <label for="upDownSlider">Up-Down</label>
                         <input type="range" id="upDownSlider" min="-100" max="100" value="0">
@@ -104,6 +105,7 @@
                         <label for="turningSlider">Turning</label>
                         <input type="range" id="turningSlider" min="-60" max="60" value="0">
                     </div>
+                    -->
                 </div>
 
                 <!-- Status Page -->
@@ -173,7 +175,10 @@
 
         <script>
             // TODO Add your variables here (and change the one below when dont needed)
-            glasscockpitTesting.addSimVar(CIRCUIT, "Bool", 0, "circuit_on", 0, 1, 1, 1);
+            glasscockpitTesting.addSimVar("A:CIRCUIT", "Bool", 0, "circuit_on", 0, 1, 1, 1);
+            glasscockpitTesting.addSimVar("A:PITCH", "Degree", 0, "pitch_control", -100, 100, 1, 0);
+            glasscockpitTesting.addSimVar("A:BANK", "Degree", 0, "bank_control", -60, 60, 1, 0);
+
 
             // Add your JavaScript code here
             // Threshold values for EGT
@@ -200,6 +205,33 @@
                 // Hide target line if the flap reaches its target
                 leftTarget.style.display = leftFlapPosition === leftFlapTarget ? 'none' : 'block';
                 rightTarget.style.display = rightFlapPosition === rightFlapTarget ? 'none' : 'block';
+
+            }
+            // Update Flaps Indicator
+            function updateFlaps(
+                leftFlapPosition,
+                rightFlapPosition,
+                leftFlapTarget,
+                rightFlapTarget
+            ) {
+                const leftFlap = document.getElementById("leftFlap");
+                const rightFlap = document.getElementById("rightFlap");
+                const leftTarget = document.getElementById("leftFlapTarget");
+                const rightTarget = document.getElementById("rightFlapTarget");
+
+                // Adjust flap heights based on position
+                leftFlap.style.height = `${leftFlapPosition}%`;
+                rightFlap.style.height = `${rightFlapPosition}%`;
+
+                // Adjust target positions
+                leftTarget.style.bottom = `${leftFlapTarget}%`;
+                rightTarget.style.bottom = `${rightFlapTarget}%`;
+
+                // Hide target line if the flap reaches its target
+                leftTarget.style.display =
+                    leftFlapPosition === leftFlapTarget ? "none" : "block";
+                rightTarget.style.display =
+                    rightFlapPosition === rightFlapTarget ? "none" : "block";
             }
 
             // Update EGT Indicator
@@ -246,6 +278,7 @@
         </script>
 
         <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
+        <script src="pf-module-glasscockpit-testing/glasscockpit-testing.js"></script>
         <script src="pf-test-instrument.js"></script>
         <!-- @js -->
 </body>
