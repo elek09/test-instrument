@@ -176,25 +176,73 @@
             glasscockpitTesting.addSimVar(CIRCUIT, "Bool", 0, "circuit_on", 0, 1, 1, 1);
 
             // Add your JavaScript code here
+            // Threshold values for EGT
+            const EGT_GREEN_LIMIT = 680;
+            const EGT_AMBER_LIMIT = 750;
+            const EGT_MIN_TEMP = 100;
+            const EGT_MAX_TEMP = 899;
+
+            // Update Flaps Indicator
             function updateFlaps(leftFlapPosition, rightFlapPosition, leftFlapTarget, rightFlapTarget) {
-                document.getElementById('leftFlap').style.height = `${leftFlapPosition}%`;
-                document.getElementById('leftFlapTarget').style.bottom = `${leftFlapTarget}%`;
+                const leftFlap = document.getElementById('leftFlap');
+                const rightFlap = document.getElementById('rightFlap');
+                const leftTarget = document.getElementById('leftFlapTarget');
+                const rightTarget = document.getElementById('rightFlapTarget');
 
-                document.getElementById('rightFlap').style.height = `${rightFlapPosition}%`;
-                document.getElementById('rightFlapTarget').style.bottom = `${rightFlapTarget}%`;
+                // Adjust flap heights based on position
+                leftFlap.style.height = `${leftFlapPosition}%`;
+                rightFlap.style.height = `${rightFlapPosition}%`;
+
+                // Adjust target positions
+                leftTarget.style.bottom = `${leftFlapTarget}%`;
+                rightTarget.style.bottom = `${rightFlapTarget}%`;
+
+                // Hide target line if the flap reaches its target
+                leftTarget.style.display = leftFlapPosition === leftFlapTarget ? 'none' : 'block';
+                rightTarget.style.display = rightFlapPosition === rightFlapTarget ? 'none' : 'block';
             }
 
+            // Update EGT Indicator
             function updateEGT(egt1Value, egt2Value) {
-                document.getElementById('egt1').style.height = `${egt1Value / 10}%`; // Assuming full bar is 1000°C
-                document.getElementById('egt1Value').innerText = `${egt1Value}°C`;
+                const egt1 = document.getElementById('egt1');
+                const egt2 = document.getElementById('egt2');
+                const egt1Text = document.getElementById('egt1Value');
+                const egt2Text = document.getElementById('egt2Value');
 
-                document.getElementById('egt2').style.height = `${egt2Value / 10}%`;
-                document.getElementById('egt2Value').innerText = `${egt2Value}°C`;
+                // Calculate EGT bar heights as a percentage of the total range
+                const egt1Height = ((egt1Value - EGT_MIN_TEMP) / (EGT_MAX_TEMP - EGT_MIN_TEMP)) * 100;
+                const egt2Height = ((egt2Value - EGT_MIN_TEMP) / (EGT_MAX_TEMP - EGT_MIN_TEMP)) * 100;
+
+                // Update the bar heights
+                egt1.style.height = `${egt1Height}%`;
+                egt2.style.height = `${egt2Height}%`;
+
+                // Update text values
+                egt1Text.innerText = `${egt1Value}°C`;
+                egt2Text.innerText = `${egt2Value}°C`;
+
+                // Change colors based on temperature
+                const updateColor = (element, value) => {
+                    if (value > EGT_AMBER_LIMIT) {
+                        element.style.backgroundColor = 'red';
+                        element.nextElementSibling.style.color = 'red'; // Update text color
+                    } else if (value > EGT_GREEN_LIMIT) {
+                        element.style.backgroundColor = 'orange';
+                        element.nextElementSibling.style.color = 'orange';
+                    } else {
+                        element.style.backgroundColor = 'green';
+                        element.nextElementSibling.style.color = 'green';
+                    }
+                };
+
+                // Apply color changes to EGT1 and EGT2
+                updateColor(egt1, egt1Value);
+                updateColor(egt2, egt2Value);
             }
 
-            // Example of updating the indicators (for testing)
-            updateFlaps(40, 60, 30, 50);
-            updateEGT(300, 700); // EGT1 at 300°C, EGT2 at 700°C
+            // Example call to update the indicators (you can replace this with dynamic values)
+            updateFlaps(50, 70, 30, 60); // Flaps: 50% left, 70% right
+            updateEGT(300, 750); 
         </script>
 
         <!-- @js path="/Pages/VCockpit/Instruments/TEST_Instrument/PFD"-->
